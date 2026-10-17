@@ -1,0 +1,96 @@
+
+---
+const title =
+  "Josiah Haruna Ayeye | Full-Stack Developer - SYNC X";
+
+const description =
+  "Explore the portfolio of Josiah Haruna Ayeye, a full-stack developer based in Nigeria. Discover web applications, AI-powered tools, creative projects, and modern digital experiences.";
+
+const rawSite = import.meta.env.PUBLIC_SITE_URL?.trim();
+
+let siteOrigin: string | undefined;
+
+if (rawSite) {
+  try {
+    const parsed = new URL(rawSite);
+    if (parsed.protocol === "https:" || parsed.protocol === "http:") {
+      siteOrigin = parsed.origin;
+    }
+  } catch {
+    console.warn("PUBLIC_SITE_URL is not a valid URL.");
+  }
+}
+
+const canonical = siteOrigin
+  ? new URL(Astro.url.pathname, siteOrigin).href
+  : undefined;
+
+const shareImage = siteOrigin
+  ? new URL("/images/sync-x-logo-orange.png", siteOrigin).href
+  : undefined;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Josiah Haruna Ayeye",
+  jobTitle: "Full-Stack Developer",
+  ...(siteOrigin ? { url: siteOrigin } : {}),
+  sameAs: [
+    "https://github.com/Jwayeye75",
+    "https://www.linkedin.com/in/josiah-haruna-ayeye-a23968444/",
+  ],
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: "Federal University Gashua",
+  },
+};
+---
+
+<title>{title}</title>
+
+<meta name="description" content={description} />
+<meta
+  name="keywords"
+  content="Josiah Haruna Ayeye, SYNC X, Full-Stack Developer, Software Developer, React, Next.js, TypeScript, Nigeria, Portfolio"
+/>
+<meta name="author" content="Josiah Haruna Ayeye" />
+<meta name="robots" content="index, follow" />
+
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+{canonical && (
+  <link rel="canonical" href={canonical} />
+)}
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="SYNC X" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+
+{canonical && (
+  <meta property="og:url" content={canonical} />
+)}
+
+{shareImage && (
+  <meta property="og:image" content={shareImage} />
+)}
+
+{shareImage && (
+  <meta
+    property="og:image:alt"
+    content="SYNC X portfolio brand logo"
+  />
+)}
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+
+{shareImage && (
+  <meta name="twitter:image" content={shareImage} />
+)}
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(structuredData)}
+/>

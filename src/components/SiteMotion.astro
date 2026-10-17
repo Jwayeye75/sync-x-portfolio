@@ -1,0 +1,195 @@
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initializeMotion() {
+    const root = document.documentElement;
+
+    // Prevent duplicate animation initialization.
+    if (root.dataset.motionReady === "true") return;
+    root.dataset.motionReady = "true";
+
+    // Respect accessibility settings.
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (reduceMotion) return;
+
+    const isMobile = window.matchMedia(
+      "(max-width: 760px)"
+    ).matches;
+
+    const distance = isMobile ? 18 : 36;
+
+    // CINEMATIC HERO ENTRANCE
+
+    const heroTimeline = gsap.timeline({
+      defaults: {
+        ease: "power3.out",
+      },
+    });
+
+    heroTimeline
+      .from(
+        ".hero-eyebrow",
+        {
+          opacity: 0,
+          y: 18,
+          duration: 0.55,
+        },
+        0.05
+      )
+      .from(
+        ".hero-title > span",
+        {
+          opacity: 0,
+          y: isMobile ? 30 : 65,
+          duration: 0.85,
+          stagger: 0.13,
+        },
+        0.16
+      )
+      .from(
+        ".hero-description",
+        {
+          opacity: 0,
+          y: 24,
+          duration: 0.7,
+        },
+        0.48
+      )
+      .from(
+        ".hero-actions",
+        {
+          opacity: 0,
+          y: 20,
+          duration: 0.65,
+        },
+        0.62
+      )
+      .from(
+        ".hero-portrait img",
+        {
+          opacity: 0,
+          scale: 0.94,
+          y: 32,
+          duration: 1.15,
+          ease: "power2.out",
+        },
+        0.25
+      )
+      .from(
+        ".hero-aside",
+        {
+          opacity: 0,
+          y: 25,
+          duration: 0.8,
+        },
+        0.65
+      );
+
+    // REUSABLE SCROLL REVEAL
+
+    function revealOnScroll(
+      selector: string,
+      move = distance,
+      duration = 0.75
+    ) {
+      const elements =
+        document.querySelectorAll<HTMLElement>(selector);
+
+      elements.forEach((element) => {
+        if (window.getComputedStyle(element).display === "none") {
+          return;
+        }
+
+        gsap.from(element, {
+          opacity: 0,
+          y: move,
+          duration,
+          ease: "power3.out",
+          clearProps: "opacity,transform,visibility",
+          scrollTrigger: {
+            trigger: element,
+            start: "top 88%",
+            once: true,
+          },
+        });
+      });
+    }
+
+    // SECTION LABELS
+    revealOnScroll(
+      ".section-kicker, .sx-eyebrow, .section-label",
+      15,
+      0.55
+    );
+
+    // HEADLINES
+    revealOnScroll(
+      [
+        ".about-left h2",
+        ".section-heading h2",
+        ".sx-heading h2",
+        ".contact-section h2",
+      ].join(", "),
+      36,
+      0.85
+    );
+
+    // BODY CONTENT
+    revealOnScroll(
+      [
+        ".about-right .about-lead",
+        ".section-heading p",
+        ".sx-intro",
+        ".contact-section p",
+      ].join(", "),
+      24,
+      0.7
+    );
+
+    // FEATURED PROJECT CARDS
+    revealOnScroll(".sx-card", 30, 0.75);
+
+    // OTHER PROJECT CARD VARIATIONS
+    revealOnScroll(".project-card", 30, 0.75);
+
+    // EDUCATION AND SKILLS
+    revealOnScroll(
+      ".education-card, .skills-panel",
+      22,
+      0.75
+    );
+
+    // CONTACT BUTTON
+    revealOnScroll(".contact-button", 20, 0.65);
+
+    // GENTLE DESKTOP PARALLAX
+    // Do not apply this on smaller displays.
+
+    if (window.matchMedia("(min-width: 900px)").matches) {
+      gsap.to(".hero-content", {
+        y: 55,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".hero",
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+    }
+
+    // Refresh positions after web fonts are ready.
+    document.fonts.ready.then(() => {
+      ScrollTrigger.refresh();
+    });
+  }
+
+  initializeMotion();
+</script>

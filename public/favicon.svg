@@ -1,0 +1,14 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>SYNC X</title>
+  <rect width="64" height="64" rx="15" fill="#121212"/>
+  <path
+    d="M14 15H25L32 25L39 15H50L38 32L50 49H39L32 39L25 49H14L26 32Z"
+    fill="#FF762B"
+  />
+  <path
+    d="M14 15H25L20 22Z"
+    fill="#FFFFFF"
+    opacity="0.9"
+  />
+</svg>
